@@ -13,7 +13,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        // Update public path
+        $this->app->bind('path.public', function ($app) {
+            return realpath(
+                $app->basePath('..')
+            );
+        });
     }
 
     /**
@@ -23,6 +28,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
     }
 }
