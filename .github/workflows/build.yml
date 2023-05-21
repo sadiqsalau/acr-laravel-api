@@ -1,0 +1,61 @@
+name: "Build and Release"
+
+on: push
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php: ["latest"]
+        include:
+          - composer-options: "--no-dev --ignore-platform-reqs"
+          - working-directory: "core"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # PHP
+
+      - name: Setup PHP
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "${{ matrix.php }}"
+
+      - name: "Composer Install"
+        uses: "ramsey/composer-install@v2"
+        with:
+          composer-options: "${{ matrix.composer-options }}"
+          working-directory: "${{ matrix.working-directory }}"
+
+      - name: Copy env
+        working-directory: "${{ matrix.working-directory }}"
+        run: cp .env.example .env
+
+      - name: Generate key
+        working-directory: "${{ matrix.working-directory }}"
+        run: php artisan key:generate
+
+      - name: Optimize Laravel
+        working-directory: "${{ matrix.working-directory }}"
+        run: |
+          php artisan route:cache
+          php artisan view:cache
+          php artisan event:cache
+
+      # Release
+
+      - name: Create build.zip
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          zip -qq -r build.zip . -x ".git*/*" -x "node_modules/*"
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            build.zip
