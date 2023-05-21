@@ -1,0 +1,47 @@
+[
+  {
+    "_id": "57c3a2a7-815c-491e-9b46-c763209ca4be",
+    "colName": "API",
+    "created": "2023-01-20T00:43:12.889Z",
+    "sortNum": 10000,
+    "folders": [
+      {
+        "_id": "edca9259-20b3-47e5-9f6c-698aeeefa7b0",
+        "name": "CSRF",
+        "containerId": "",
+        "created": "2023-05-21T07:54:11.483Z",
+        "sortNum": 70000
+      },
+      {
+        "_id": "88086126-3493-4466-aca2-8c19e17f98ba",
+        "name": "Contact",
+        "containerId": "",
+        "created": "2023-05-21T07:54:46.777Z",
+        "sortNum": 80000
+      }
+    ],
+    "settings": {
+      "headers": [
+        {
+          "name": "X-XSRF-TOKEN",
+          "value": "{{XSRF-TOKEN | urlDecode}}"
+        },
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "tests": [
+        {
+          "type": "set-env-var",
+          "custom": "cookie.xsrf-token",
+          "action": "setto",
+          "value": "{{XSRF-TOKEN, local}}"
+        }
+      ],
+      "options": {
+        "baseUrl": "http://localhost:8000"
+      }
+    }
+  }
+]
