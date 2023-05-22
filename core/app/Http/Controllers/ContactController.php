@@ -24,5 +24,7 @@ class ContactController extends Controller
             email: $request->email,
             message: $request->message
         ));
+
+        return $this->successResponse("Message sent!");
     }
 }
