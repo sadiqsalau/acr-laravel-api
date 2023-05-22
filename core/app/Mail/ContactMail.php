@@ -36,11 +36,7 @@ class ContactMail extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Contact: ' . $this->first_name . ' ' . $this->last_name,
-            from: new Address(
-                $this->email,
-                $this->first_name . ' ' . $this->last_name
-            )
+            subject: 'Contact: ' . $this->first_name . ' ' . $this->last_name
         );
     }
 
